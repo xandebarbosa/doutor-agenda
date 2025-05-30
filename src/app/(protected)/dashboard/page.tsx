@@ -15,12 +15,7 @@ const DashboardPage = async () => {
     redirect("/authentication");
   }
 
-  // Pegando as clinicas do usuário
-  const clinics = await db.query.usersToClinicsTable.findMany({
-    where: eq(usersToClinicsTable.userId, session.user.id),
-  });
-
-  if (clinics.length === 0) {
+  if (!session.user.clinic) {
     redirect("/clinic-form");
   }
 

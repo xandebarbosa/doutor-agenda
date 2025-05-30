@@ -34,14 +34,27 @@ import {
 } from "@/components/ui/select";
 import { doctorsTable } from "@/db/schema";
 
-import { medicalSpecialties } from "../_constants";
+import { medicalSpecialties } from "../constants";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { TrashIcon } from "lucide-react";
+import { deleteDoctor } from "@/actions/delete-doctor";
 
 const formSchema = z
   .object({
     name: z.string().trim().min(1, {
       message: "Nome é obrigatório.",
     }),
-    specialty: z.string().trim().min(1, {
+    speciality: z.string().trim().min(1, {
       message: "Especialidade é obrigatória.",
     }),
     appointmentPrice: z.number().min(1, {
@@ -74,11 +87,11 @@ interface UpsertDoctorFormProps {
 
 const UpsertDoctorForm = ({ doctor, onSuccess }: UpsertDoctorFormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
-    shouldUnregister: true,
+    shouldUnregister: true, //apaga os dados do formulario quando o formulario for desmontado
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: doctor?.name ?? "",
-      specialty: doctor?.specialty ?? "",
+      speciality: doctor?.speciality ?? "",
       appointmentPrice: doctor?.appointmentPriceInCents
         ? doctor.appointmentPriceInCents / 100
         : 0,
@@ -135,7 +148,7 @@ const UpsertDoctorForm = ({ doctor, onSuccess }: UpsertDoctorFormProps) => {
           />
           <FormField
             control={form.control}
-            name="specialty"
+            name="speciality"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Especialidade</FormLabel>
