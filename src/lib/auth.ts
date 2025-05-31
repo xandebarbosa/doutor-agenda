@@ -8,7 +8,7 @@ import { eq } from "drizzle-orm";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
-    provider: "pg", // or "pg" or "mysql"
+    provider: "pg",
     usePlural: true,
     schema,
   }),
@@ -58,3 +58,21 @@ export const auth = betterAuth({
     enabled: true,
   },
 });
+
+// export async function getClinicId() {
+//   const session = await auth();
+
+//   if (!session?.user?.id) {
+//     throw new Error("Unauthorized");
+//   }
+
+//   const userToClinic = await db.query.usersToClinicsTable.findFirst({
+//     where: eq(usersToClinicsTable.userId, session.user.id),
+//   });
+
+//   if (!userToClinic?.clinicId) {
+//     throw new Error("No clinic found");
+//   }
+
+//   return userToClinic.clinicId;
+// }
